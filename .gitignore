@@ -1,0 +1,41 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# Python cache and tooling
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime data and generated state
+runtime/
+*.pid
+
+# Crash dumps and local logs
+*.log
+hs_err_pid*.log
+replay_pid*.log
+
+# Build and generated artifacts
+dist/
+build/
+docs/INFORME_FINAL_ENTREGA.pdf
+codex.txt

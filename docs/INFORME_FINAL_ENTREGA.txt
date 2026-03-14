@@ -1,0 +1,242 @@
+INFORME FINAL DEL PROYECTO
+Fraud Lakehouse con Kafka, Spark, Iceberg, Trino, Airflow y Neo4j
+
+1. RESUMEN DEL PROYECTO
+
+El proyecto implementa una cadena completa de deteccion de fraude sobre una
+arquitectura moderna de datos. El flujo parte de eventos sinteticos de pagos,
+los ingiere mediante Kafka, los persiste y transforma sobre un Lakehouse con
+Spark e Iceberg, los expone para consulta mediante Trino, los orquesta con
+Airflow y los proyecta a un grafo de investigacion en Neo4j.
+
+La idea central del trabajo no ha sido solo conectar herramientas, sino
+demostrar una arquitectura coherente por capas:
+
+- Bronze: persistencia de la traza cruda.
+- Silver: limpieza, tipado, deduplicacion y enriquecimiento.
+- Gold: reglas de riesgo y alertas interpretables.
+- Grafo: investigacion relacional de entidades sospechosas.
+
+
+2. UTILIDAD DEL PROYECTO
+
+La solucion desarrollada sirve como base de un sistema de deteccion e
+investigacion de fraude en pagos. En su estado actual permite:
+
+- generar eventos de pago con distintos escenarios anomales
+- conservar el dato crudo para auditoria y replay
+- enriquecer transacciones con contexto temporal y de comportamiento
+- calcular un risk_score y motivos explicables por alerta
+- consultar resultados por SQL sin mover el dato
+- orquestar exportaciones y cargas bajo demanda
+- visualizar relaciones entre clientes, tarjetas, dispositivos, pagos y
+  comercios en un grafo
+
+Esto hace que el proyecto tenga valor tanto docente como tecnico: demuestra
+ingesta, transformacion, consulta, orquestacion y analisis forense en una
+misma plataforma.
+
+
+3. RESULTADOS REALES VALIDADOS
+
+En la validacion final del proyecto se confirmaron estos resultados:
+
+- Registros Bronze: 7443
+- Registros Silver: 7299
+- Alertas Gold: 7049
+
+Interpretacion:
+
+- Bronze recoge el volumen crudo ingerido desde Kafka.
+- Silver reduce ligeramente el volumen tras tipado y deduplicacion.
+- Gold marca una proporcion muy alta de sospecha, lo que es coherente con un
+  generador sintetico orientado a escenarios de fraude y reglas de demo
+  relativamente agresivas.
+
+En Neo4j tambien se verifico correctamente la carga del grafo:
+
+- Nodos totales: 8058
+- Payments: 7299
+- Customers: 250
+- Cards: 250
+- Merchants: 180
+- Devices: 79
+
+Relaciones observadas:
+
+- AUTHORIZED: 7299
+- AT_MERCHANT: 7299
+- USED_ON: 936
+- OWNS_CARD: 250
+
+Estas cifras confirman que el grafo se ha construido de forma consistente y
+que existe reutilizacion de dispositivos, un patron especialmente util para
+la investigacion de fraude conectado.
+
+
+4. QUE HEMOS APRENDIDO
+
+El principal aprendizaje del proyecto ha sido comprobar que una arquitectura
+Lakehouse es especialmente adecuada para separar responsabilidades en un
+pipeline de fraude:
+
+- la ingesta no debe mezclarse con la limpieza
+- el enriquecimiento no debe mezclarse con la explotacion
+- la alerta no debe ser solo una etiqueta, sino una explicacion
+
+Tambien hemos aprendido que SQL y grafo responden a preguntas diferentes.
+Con Trino resulta natural validar volumenes, scores y rankings de riesgo.
+Con Neo4j se hacen visibles patrones de relacion que en una tabla son mucho
+menos evidentes, como dispositivos compartidos, tarjetas conectadas a muchos
+pagos o comercios asociados a actividad anomala.
+
+Otro aprendizaje muy importante ha sido el puramente operativo. Desplegar y
+mantener un stack de datos relativamente amplio sobre una maquina ligera
+obliga a entender logs, reinicios, dependencias y consumo de memoria. En un
+proyecto real, esa capacidad de diagnostico es tan importante como las
+transformaciones analiticas.
+
+
+5. PROBLEMAS ENCONTRADOS Y COMO SE RESOLVIERON
+
+Durante el desarrollo y la validacion se encontraron varios problemas reales.
+Lejos de ser un obstaculo irrelevante, han formado parte del aprendizaje del
+proyecto:
+
+1. Imagen de Spark no disponible
+   La imagen externa inicialmente prevista no estaba accesible. Se sustituyo
+   por una imagen local propia basada en Spark 3.5.8.
+
+2. Problemas de inicializacion en Airflow y Superset
+   Se corrigieron entrypoints y comandos para evitar que los servicios init
+   quedaran mal interpretados por Docker Compose.
+
+3. Error de region S3 al usar MinIO con Iceberg
+   Aunque no se usaba AWS real, el cliente compatible S3 exigia una region.
+   Se fijo us-east-1 en la configuracion.
+
+4. Bronze devolvia el prompt sin una excepcion clara
+   Se mejoro el script de streaming para dejar trazas explicitas y evitar
+   falsos silencios al arrancar.
+
+5. Trino se caia por configuracion y despues por memoria
+   Primero se corrigio el driver JDBC del catalogo Iceberg. Despues se redujo
+   el heap y se estabilizo el servicio para una maquina local de recursos
+   limitados.
+
+6. Neo4j se caia con Exited (137)
+   Se rebajo memoria, page cache y se dejo reinicio automatico.
+
+7. Airflow mostraba Broken DAG o desaparecia el DAG
+   El webserver y el scheduler estaban demasiado ajustados. Se redujo el
+   numero de workers y procesos de parseo.
+
+8. El DAG de Airflow no resolvia correctamente el host trino
+   Se sustituyo la conexion por host.docker.internal:8080, que resulto mas
+   estable en este entorno concreto.
+
+9. La compactacion Iceberg fallaba de forma intermitente
+   La sentencia de optimize se convirtio en un paso no bloqueante, ya que no
+   era imprescindible para exportar el grafo ni para la demo.
+
+En conjunto, estos problemas han reforzado la conclusion de que la ingenieria
+de datos real exige tanto criterio tecnico como capacidad de operacion y
+ajuste del entorno.
+
+
+6. EVIDENCIAS TECNICAS Y LOGS REPRESENTATIVOS
+
+Conteos validados en Trino:
+
+SELECT count(*) FROM iceberg.payments.bronze_payments;  -> 7443
+SELECT count(*) FROM iceberg.payments.silver_payments;  -> 7299
+SELECT count(*) FROM iceberg.payments.fraud_alerts;     -> 7049
+
+Mensajes de error representativos observados durante la puesta en marcha:
+
+- "Unable to load region from any of the providers in the chain ..."
+- "Invalid configuration property iceberg.jdbc-catalog.driver-class:
+   must not be null"
+- "PySparkTypeError: [NOT_ITERABLE] Column is not iterable"
+- "SIGSEGV (0xb) ..." durante Gold, asociado a la JVM
+- "Failed to resolve 'trino'" en el DAG de Airflow
+- "Remote end closed connection without response" en la compactacion Iceberg
+- "Worker (...) was sent SIGKILL! Perhaps out of memory?" en Airflow
+
+Estos logs no se han tratado como simples fallos puntuales, sino como parte de
+la validacion del sistema, porque han obligado a endurecer la arquitectura y
+adaptarla a un entorno local real.
+
+
+7. EVIDENCIAS VISUALES OBSERVADAS DURANTE LA SESION
+
+Durante la validacion se observaron visualmente varias evidencias relevantes:
+
+- Kafka UI mostrando entrada de eventos en el topic de pagos.
+- Spark UI levantando la aplicacion Bronze y procesando el stream.
+- Airflow con el DAG fraud_graph_pipeline finalmente en verde.
+- Neo4j Browser mostrando:
+  - carga correcta de nodos Payment, Customer, Card, Merchant y Device
+  - relaciones AUTHORIZED, AT_MERCHANT, USED_ON y OWNS_CARD
+  - subgrafos con dispositivos compartidos por multiples tarjetas
+
+Nota:
+Las capturas utilizadas en la conversacion estaban disponibles en el hilo, pero
+no como archivos locales dentro del workspace. Por ese motivo este PDF recoge
+su descripcion y el resultado validado, pero no las incrusta como imagenes.
+
+
+8. LIMITACIONES RECONOCIDAS
+
+Es importante reconocer que el proyecto tiene limites razonables:
+
+- el score se basa en reglas heuristicas, no en un modelo supervisado entrenado
+- los datos son sinteticos y sirven para validar arquitectura, no precision
+  estadistica en produccion
+- la robustez del entorno depende del hardware disponible y, en esta demo,
+  especialmente de la memoria de Docker Desktop
+- algunas tareas de mantenimiento, como la compactacion, no son adecuadas para
+  ejecutarse en paralelo con toda la plataforma sobre un equipo de 8 GB
+
+Estas limitaciones no invalidan el proyecto; simplemente delimitan su alcance
+actual como demostrador tecnico muy completo.
+
+
+9. MEJORAS DE FUTURO
+
+El proyecto tiene un recorrido de mejora muy claro:
+
+1. Machine Learning
+   Entrenar un modelo supervisado o semisupervisado sobre Silver y combinarlo
+   con las reglas para obtener un risk_score mas fino.
+
+2. Enriquecimiento externo
+   Incorporar reputacion de IP, BIN, geolocalizacion avanzada o listas negras.
+
+3. Calidad de datos
+   Anadir tests automaticos, validaciones de esquema y controles de drift.
+
+4. Mantenimiento y operacion
+   Separar mejor tareas online y offline, dejando la compactacion como job de
+   mantenimiento dedicado.
+
+5. Visualizacion y explotacion
+   Mejorar dashboards, cuadros de mando y vistas del grafo orientadas a casos
+   de investigacion concretos.
+
+6. Automatizacion del grafo
+   Programar snapshots periodicos y comparar estados del grafo en el tiempo.
+
+
+10. CONCLUSION GENERAL
+
+El resultado final demuestra que se ha construido una solucion completa,
+coherente y ampliable para la deteccion de fraude sobre arquitectura moderna de
+datos. El sistema parte de eventos casi en tiempo real, los consolida en un
+Lakehouse, genera alertas interpretables, habilita consulta SQL y termina en
+un grafo de investigacion para descubrir relaciones complejas.
+
+Mas importante aun, el proyecto no solo ha servido para aprender herramientas,
+sino para entender como encajan entre si, como se validan en conjunto y como
+se estabilizan cuando aparecen problemas reales de integracion o recursos.
+Ese es, probablemente, el aprendizaje mas valioso del trabajo realizado.

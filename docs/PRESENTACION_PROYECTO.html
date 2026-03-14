@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Presentacion - Sistema de deteccion de pagos fraudulentos</title>
+  <style>
+    :root {
+      --bg: #f4efe7;
+      --panel: #fffaf3;
+      --ink: #182126;
+      --muted: #536066;
+      --accent: #b5462f;
+      --accent-2: #1d6b57;
+      --accent-3: #d79d2b;
+      --line: #dfd2c2;
+      --shadow: 0 20px 45px rgba(24, 33, 38, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(181, 70, 47, 0.12), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(29, 107, 87, 0.16), transparent 26%),
+        linear-gradient(180deg, #f7f1e8 0%, #f0e7db 100%);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    body {
+      padding: 24px;
+    }
+
+    .deck {
+      max-width: 1280px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar h1 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .toolbar .hint {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .slides {
+      position: relative;
+      min-height: 760px;
+    }
+
+    .slide {
+      display: none;
+      background: rgba(255, 250, 243, 0.92);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 38px 42px 34px;
+      min-height: 760px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide.active {
+      display: block;
+      animation: fade-in 220ms ease-out;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.84rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 2.5rem;
+      line-height: 1.08;
+      max-width: 12ch;
+    }
+
+    h3 {
+      margin: 0 0 14px;
+      font-size: 1.35rem;
+    }
+
+    p {
+      margin: 0 0 14px;
+      line-height: 1.55;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .lead {
+      font-size: 1.2rem;
+      max-width: 60ch;
+      color: var(--ink);
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1.25fr 1fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.72);
+      padding: 20px;
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-size: 1.04rem;
+    }
+
+    ul, ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .stat .value {
+      font-size: 1.9rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .stat .label {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+      margin-top: 26px;
+      align-items: start;
+    }
+
+    .node {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px 14px;
+      background: rgba(255, 255, 255, 0.78);
+      min-height: 155px;
+      position: relative;
+    }
+
+    .node::after {
+      content: "->";
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .node:last-child::after {
+      display: none;
+    }
+
+    .node .title {
+      display: block;
+      font-size: 1.02rem;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .node .mini {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .node.accent-a {
+      border-top: 4px solid var(--accent);
+    }
+
+    .node.accent-b {
+      border-top: 4px solid var(--accent-2);
+    }
+
+    .node.accent-c {
+      border-top: 4px solid var(--accent-3);
+    }
+
+    .terminal {
+      background: #1b1e23;
+      color: #e8f0f2;
+      border-radius: 20px;
+      padding: 18px 20px;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.96rem;
+      line-height: 1.6;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+      white-space: pre-wrap;
+    }
+
+    .callout {
+      border-left: 5px solid var(--accent);
+      padding: 14px 16px;
+      background: rgba(181, 70, 47, 0.07);
+      border-radius: 14px;
+      color: var(--ink);
+      margin-top: 16px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .check {
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(255,255,255,0.54);
+    }
+
+    .check span {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .pager {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .pager button {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.85);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .pager button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .progress {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #c8bba9;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      transform: scale(1.2);
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .image-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .image-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.72);
+    }
+
+    .image-card img {
+      width: 100%;
+      display: block;
+      max-height: 220px;
+      object-fit: cover;
+      object-position: top;
+      background: #ece2d5;
+    }
+
+    .image-card .caption {
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .table-like {
+      display: grid;
+      grid-template-columns: 1.1fr 1.5fr 1.2fr;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .table-like div {
+      padding: 14px 16px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.65);
+      min-height: 72px;
+    }
+
+    .table-like div:nth-child(3n) {
+      border-right: 0;
+    }
+
+    .table-like .head {
+      font-weight: 700;
+      background: rgba(29, 107, 87, 0.12);
+    }
+
+    .stamp {
+      position: absolute;
+      top: 34px;
+      right: 38px;
+      border: 2px solid rgba(181, 70, 47, 0.26);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 0.88rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transform: rotate(-7deg);
+      background: rgba(255,250,243,0.82);
+    }
+
+    @media (max-width: 1024px) {
+      .grid-2,
+      .grid-3,
+      .flow,
+      .stat-strip,
+      .checklist,
+      .table-like {
+        grid-template-columns: 1fr;
+      }
+
+      .node::after {
+        display: none;
+      }
+
+      .slide {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <div class="toolbar">
+      <h1>Presentacion grafica del proyecto</h1>
+      <div class="hint">Usa flechas izquierda/derecha o los botones inferiores</div>
+    </div>
+
+    <div class="slides">
+      <section class="slide active">
+        <div class="stamp">Demo Ready</div>
+        <span class="eyebrow">Slide 1 - Vision general</span>
+        <h2>Sistema de deteccion de pagos fraudulentos</h2>
+        <p class="lead">Proyecto Lakehouse de extremo a extremo con Kafka, Spark, Iceberg, MinIO, Trino, Superset, Airflow y Neo4j para detectar fraude y explicar las alertas.</p>
+        <div class="stat-strip">
+          <div class="stat">
+            <span class="value">7</span>
+            <span class="label">tecnologias principales conectadas</span>
+          </div>
+          <div class="stat">
+            <span class="value">3</span>
+            <span class="label">capas de datos: Bronze, Silver, Gold</span>
+          </div>
+          <div class="stat">
+            <span class="value">1</span>
+            <span class="label">DAG manual para exportacion al grafo</span>
+          </div>
+          <div class="stat">
+            <span class="value">2</span>
+            <span class="label">modos de analisis: SQL y relaciones</span>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Mensaje para la exposicion:</strong>
+          La clave no es solo detectar transacciones sospechosas, sino demostrar una arquitectura moderna que ingiere, limpia, enriquece, monitoriza y finalmente investiga relaciones complejas entre entidades.
+        </div>
+        <div class="footer">
+          <span>Archivo autocontenido para abrir en navegador</span>
+          <span>ProyectoT2 - Pagos fraudulentos</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 2 - Arquitectura</span>
+        <h2>Arquitectura tecnica y flujo de datos</h2>
+        <p class="lead">El flujo separa claramente ingesta, persistencia cruda, enriquecimiento, deteccion, explotacion analitica y analisis de relaciones.</p>
+        <div class="flow">
+          <div class="node accent-a">
+            <span class="title">1. Generador</span>
+            <div class="mini">Python publica eventos sinteticos de pago hacia Kafka con casos normales, reintentos y patrones sospechosos.</div>
+          </div>
+          <div class="node accent-a">
+            <span class="title">2. Kafka</span>
+            <div class="mini">Topic `payments` como capa de ingesta casi en tiempo real.</div>
+          </div>
+          <div class="node accent-b">
+            <span class="title">3. Spark Streaming</span>
+            <div class="mini">Consume Kafka y escribe Bronze en Iceberg sin transformar el dato funcional.</div>
+          </div>
+          <div class="node accent-b">
+            <span class="title">4. Iceberg + MinIO</span>
+            <div class="mini">Lakehouse con tablas Bronze, Silver, Gold sobre almacenamiento S3 compatible.</div>
+          </div>
+          <div class="node accent-c">
+            <span class="title">5. Trino</span>
+            <div class="mini">Consulta SQL unificada sobre Iceberg sin mover datos.</div>
+          </div>
+          <div class="node accent-c">
+            <span class="title">6. Superset</span>
+            <div class="mini">Dashboard de volumen, alertas y entidades de mayor riesgo.</div>
+          </div>
+          <div class="node accent-c">
+            <span class="title">7. Airflow + Neo4j</span>
+            <div class="mini">Compacta, exporta y carga el grafo para investigacion conectada.</div>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Que destacar:</strong>
+          Bronze conserva el dato original, Silver lo hace util, Gold lo convierte en accionable y Neo4j permite pasar de una alerta aislada a una red sospechosa.
+        </div>
+        <div class="footer">
+          <span>Explica primero el flujo general y luego profundiza por etapas</span>
+          <span>2 / 10</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 3 - Antes de arrancar</span>
+        <h2>Requisitos previos y comprobaciones</h2>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Requisitos del entorno</strong>
+            <ul>
+              <li>Docker y Docker Compose instalados</li>
+              <li>Conexion a Internet en la primera ejecucion para descargar paquetes de Spark</li>
+              <li>Puertos libres: `5432`, `7474`, `7687`, `8080`, `8081`, `8088`, `9000`, `9001`, `29092`</li>
+              <li>Espacio suficiente para imagenes y volumenes locales</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Comprobacion minima</strong>
+            <div class="terminal">docker --version
+docker compose version
+cp .env.example .env</div>
+            <p class="note">La demo local puede ejecutarse con las credenciales por defecto definidas en `.env.example`.</p>
+          </div>
+        </div>
+        <div class="checklist">
+          <div class="check">
+            <span>Que hay que vigilar</span>
+            Si `docker compose up` falla durante el build, lo primero es revisar conectividad de red y espacio en disco.
+          </div>
+          <div class="check">
+            <span>Que conviene explicar</span>
+            El proyecto se ha planteado para ser reproducible, con contenedores aislados y una red comun para todos los servicios.
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Aclaracion importante:</strong>
+          Aunque aparezca `AWS_REGION` en la configuracion, no se usa AWS real. MinIO habla API S3 y el cliente necesita una region ficticia para funcionar, por eso se fija `us-east-1`.
+        </div>
+        <div class="image-row">
+          <div class="image-card">
+            <img src="https://raw.githubusercontent.com/provectus/kafka-ui/master/documentation/images/Interface.gif" alt="Kafka UI oficial">
+            <div class="caption">Kafka UI permite navegar por clusters, topics y mensajes. Para la demo interesa seguir la ruta `local -> Topics -> payments -> Messages`.</div>
+          </div>
+          <div class="image-card">
+            <img src="https://spark.apache.org/docs/3.5.6/img/webui-structured-streaming-detail.png" alt="Spark Structured Streaming UI oficial">
+            <div class="caption">La Spark UI muestra la pestana `Structured Streaming`. Ahí es donde conviene leer `Input Rate`, `Process Rate`, `Input Rows` y `Batch Duration`.</div>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Empieza la demo validando el entorno</span>
+          <span>3 / 10</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 4 - Arranque</span>
+        <h2>Como levantar toda la plataforma</h2>
+        <div class="grid-2">
+          <div>
+            <div class="terminal">./scripts/start_all.sh</div>
+            <div class="card" style="margin-top: 16px;">
+              <strong>Este script hace todo esto</strong>
+              <ol>
+                <li>Crea directorios `runtime`.</li>
+                <li>Construye las imagenes extendidas necesarias.</li>
+                <li>Levanta PostgreSQL, MinIO, Kafka, Spark, Neo4j y el contenedor del generador.</li>
+                <li>Inicializa el bucket de MinIO y el topic de Kafka.</li>
+                <li>Inicializa Airflow y Superset.</li>
+                <li>Levanta Trino, Airflow y Superset listos para su uso.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="card">
+            <strong>Que debes verificar al terminar</strong>
+            <ul>
+              <li>MinIO responde en `http://localhost:9001`</li>
+              <li>Kafka UI responde en `http://localhost:8082`</li>
+              <li>Spark UI quedara visible en `http://localhost:4040-4050` al lanzar jobs Spark</li>
+              <li>Superset responde en `http://localhost:8088`</li>
+              <li>Airflow responde en `http://localhost:8081`</li>
+              <li>Neo4j responde en `http://localhost:7474`</li>
+              <li>Trino queda operativo en `http://localhost:8080`</li>
+            </ul>
+            <div class="callout">
+              <strong>Punto de atencion:</strong>
+              Si un servicio no responde, no sigas con la demo. Corrige primero la infraestructura, porque todo lo demas depende de esta base.
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Un mal arranque arrastra errores al resto del pipeline</span>
+          <span>4 / 10</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 5 - Ingesta</span>
+        <h2>Generacion de datos y capa Bronze</h2>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Paso 1: dejar Bronze escuchando</strong>
+            <div class="terminal">./scripts/run_bronze.sh</div>
+            <p>Este job de Spark Structured Streaming escucha Kafka y escribe en `iceberg.payments.bronze_payments` sin alterar el esquema funcional del evento.</p>
+          </div>
+          <div class="card">
+            <strong>Paso 2: lanzar el generador</strong>
+            <div class="terminal">./scripts/run_generator.sh --events 5000 --sleep-ms 150</div>
+            <p>El generador simula pagos normales, reintentos, patrones sospechosos y algunos duplicados para poder demostrar la deduplicacion en Silver.</p>
+          </div>
+        </div>
+        <div class="table-like">
+          <div class="head">Paso</div>
+          <div class="head">Que mirar</div>
+          <div class="head">Que decir</div>
+          <div>Bronze activo</div>
+          <div>El job queda vivo y no termina. En Spark UI puedes ver el streaming y sus micro-batches.</div>
+          <div>La ingesta esta desacoplada y el sistema queda preparado para trabajar en flujo continuo.</div>
+          <div>Generador en marcha</div>
+          <div>En Kafka UI se ven mensajes JSON entrando con diferentes escenarios y patrones de riesgo.</div>
+          <div>No son datos aleatorios sin criterio; se han introducido conductas que luego activan reglas de fraude.</div>
+        </div>
+        <div class="checklist">
+          <div class="check">
+            <span>Ruta en Kafka UI</span>
+            `local -> Topics -> payments -> Messages`
+          </div>
+          <div class="check">
+            <span>Ruta en Spark UI</span>
+            Bronze: `Structured Streaming -> run id` / Silver y Gold: `Jobs` y `SQL`
+          </div>
+        </div>
+        <div class="footer">
+          <span>Bronze demuestra la captura cruda del evento</span>
+          <span>5 / 10</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 6 - Transformacion</span>
+        <h2>Construccion de Silver y Gold</h2>
+        <div class="grid-3">
+          <div class="card">
+            <strong>Silver</strong>
+            <div class="terminal">./scripts/run_silver.sh</div>
+            <ul>
+              <li>tipado correcto</li>
+              <li>deduplicacion</li>
+              <li>variables por ventanas temporales</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Gold</strong>
+            <div class="terminal">./scripts/run_gold.sh</div>
+            <ul>
+              <li>reglas de fraude</li>
+              <li>`fraud_alerts`</li>
+              <li>`graph_payments`</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Que hay que fijarse</strong>
+            <ul>
+              <li>Silver suele tener menos filas que Bronze por la deduplicacion.</li>
+              <li>Gold contiene solo los casos sospechosos.</li>
+              <li>`reasons` explica por que se dispara cada alerta.</li>
+              <li>Si Bronze sigue vivo, Silver y Gold suelen abrir nuevas Spark UI en puertos siguientes, por ejemplo `4041` y `4042`.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Mensaje para defender:</strong>
+          Silver crea contexto. Gold convierte ese contexto en decision. Esa separacion hace la arquitectura mas mantenible y mas explicable.
+        </div>
+        <div class="footer">
+          <span>Esta es la parte donde se convierte el dato en inteligencia</span>
+          <span>6 / 10</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 7 - Validacion SQL</span>
+        <h2>Comprobacion de resultados con Trino</h2>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Acceso al cliente SQL</strong>
+            <div class="terminal">docker compose exec trino trino</div>
+            <strong style="margin-top: 14px;">Consultas clave</strong>
+            <div class="terminal">SHOW TABLES FROM iceberg.payments;
+
+SELECT count(*) FROM iceberg.payments.bronze_payments;
+SELECT count(*) FROM iceberg.payments.silver_payments;
+SELECT count(*) FROM iceberg.payments.fraud_alerts;
+
+SELECT *
+FROM iceberg.payments.fraud_alerts
+ORDER BY risk_score DESC
+LIMIT 20;</div>
+          </div>
+          <div class="card">
+            <strong>Que debes comprobar y explicar</strong>
+            <ul>
+              <li>Bronze refleja la ingesta original.</li>
+              <li>Silver filtra ruido y aporta contexto temporal.</li>
+              <li>Gold es la capa de accion y monitorizacion.</li>
+              <li>Las columnas `risk_score` y `reasons` hacen la alerta interpretable.</li>
+            </ul>
+            <p class="note" style="margin-top: 12px;">En paralelo puedes mantener abiertas Kafka UI y Spark UI para ensenar tanto la entrada de mensajes como su procesamiento.</p>
+            <div class="callout">
+              <strong>Frase util:</strong>
+              No solo detectamos fraude; podemos justificar por que una operacion ha sido marcada como sospechosa.
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Trino es la prueba de que el Lakehouse ya es explotable por SQL</span>
+          <span>7 / 10</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 8 - Visualizacion</span>
+        <h2>Dashboard en Superset y lectura operativa</h2>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Configuracion base</strong>
+            <p>Conectar Superset con la URI:</p>
+            <div class="terminal">trino://trino@trino:8080/iceberg/payments</div>
+            <p>Registrar los datasets `silver_payments` y `fraud_alerts`.</p>
+            <strong style="margin-top: 12px;">Graficas recomendadas</strong>
+            <ul>
+              <li>KPI total de transacciones</li>
+              <li>KPI total de alertas</li>
+              <li>Serie temporal de alertas por hora</li>
+              <li>Top merchants por riesgo medio</li>
+              <li>Top cards por riesgo medio</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Que observar en cada visual</strong>
+            <ul>
+              <li><strong>Volumen total:</strong> confirma que el pipeline procesa datos.</li>
+              <li><strong>Total de alertas:</strong> mide presion de fraude sobre el lote.</li>
+              <li><strong>Serie temporal:</strong> identifica picos o ventanas anomalias.</li>
+              <li><strong>Top merchants:</strong> ayuda a priorizar investigacion.</li>
+              <li><strong>Top cards:</strong> detecta concentracion de riesgo por medio de pago.</li>
+            </ul>
+            <div class="callout">
+              <strong>Lectura de negocio:</strong>
+              El dashboard traduce la logica tecnica del pipeline en indicadores que un equipo de riesgo puede seguir.
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Superset es la capa de observabilidad operativa</span>
+          <span>8 / 10</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 9 - Orquestacion y grafo</span>
+        <h2>Airflow y Neo4j para investigacion conectada</h2>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Disparo del DAG</strong>
+            <p>En Airflow, lanzar `fraud_graph_pipeline` con parametros como estos:</p>
+            <div class="terminal">{
+  "source_table": "graph_payments",
+  "start_ts": "",
+  "end_ts": "",
+  "graph_name": "fraud_snapshot_demo"
+}</div>
+            <p>El DAG compacta Iceberg, exporta CSVs y los carga en Neo4j.</p>
+          </div>
+          <div class="card">
+            <strong>Consultas Cypher a ensenar</strong>
+            <ul>
+              <li>dispositivos compartidos por multiples tarjetas</li>
+              <li>tarjetas utilizadas en multiples paises</li>
+              <li>comercios conectados a multiples entidades sospechosas</li>
+              <li>agrupaciones de comportamiento anomalo</li>
+            </ul>
+            <div class="callout">
+              <strong>Que aporta Neo4j:</strong>
+              SQL detecta registros sospechosos. El grafo permite descubrir si varios casos aparentemente aislados forman parte de una misma red.
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <span>Aqui es donde el proyecto gana profundidad investigadora</span>
+          <span>9 / 10</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 10 - Guion final</span>
+        <h2>Checklist de demo y mensajes de cierre</h2>
+        <div class="checklist">
+          <div class="check">
+            <span>1. Arranque</span>
+            Confirmar que todos los servicios responden antes de seguir.
+          </div>
+          <div class="check">
+            <span>2. Ingesta</span>
+            Mostrar Bronze escuchando y el generador publicando eventos.
+          </div>
+          <div class="check">
+            <span>3. Transformacion</span>
+            Ejecutar Silver y Gold y explicar por que se separan ambas capas.
+          </div>
+          <div class="check">
+            <span>4. Verificacion</span>
+            Ensenar consultas en Trino con recuentos y alertas de mayor riesgo.
+          </div>
+          <div class="check">
+            <span>5. Visualizacion</span>
+            Mostrar el dashboard de Superset y leer las metricas clave.
+          </div>
+          <div class="check">
+            <span>6. Investigacion</span>
+            Lanzar el DAG y terminar con una consulta en Neo4j.
+          </div>
+        </div>
+        <div class="card" style="margin-top: 20px;">
+          <strong>Mensajes finales recomendados</strong>
+          <ul>
+            <li>La arquitectura separa bien ingestion, procesamiento, consumo y analisis forense.</li>
+            <li>Las alertas son explicables porque cada una conserva su `risk_score` y `reasons`.</li>
+            <li>El sistema es ampliable: se pueden anadir modelos, nuevas reglas y nuevas fuentes.</li>
+            <li>El valor diferencial aparece al combinar SQL para monitorizacion y grafo para investigacion conectada.</li>
+          </ul>
+        </div>
+        <div class="footer">
+          <span>Cierra la exposicion uniendo arquitectura, operativa y valor analitico</span>
+          <span>10 / 10</span>
+        </div>
+      </section>
+    </div>
+
+    <div class="pager">
+      <button type="button" id="prev">Anterior</button>
+      <div class="progress" id="progress"></div>
+      <button type="button" id="next">Siguiente</button>
+    </div>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const progress = document.getElementById("progress");
+    const prevButton = document.getElementById("prev");
+    const nextButton = document.getElementById("next");
+    let current = 0;
+
+    function renderProgress() {
+      progress.innerHTML = "";
+      slides.forEach((_, index) => {
+        const dot = document.createElement("div");
+        dot.className = "dot" + (index === current ? " active" : "");
+        progress.appendChild(dot);
+      });
+    }
+
+    function showSlide(index) {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle("active", slideIndex === current);
+      });
+      renderProgress();
+    }
+
+    prevButton.addEventListener("click", () => showSlide(current - 1));
+    nextButton.addEventListener("click", () => showSlide(current + 1));
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown") {
+        showSlide(current + 1);
+      }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") {
+        showSlide(current - 1);
+      }
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
