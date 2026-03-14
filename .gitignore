@@ -1,6 +1,8 @@
 # Operating system files
 .DS_Store
 Thumbs.db
+.Rhistory
+.RData
 
 # Environment and secrets
 .env
