@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Presentacion - Sistema de deteccion de pagos fraudulentos</title>
+  <title>Presentación - Sistema de detección de pagos fraudulentos</title>
   <style>
     :root {
       --bg: #f4efe7;
@@ -446,7 +446,7 @@
 <body>
   <div class="deck">
     <div class="toolbar">
-      <h1>Presentacion grafica del proyecto</h1>
+      <h1>Presentación grafica del proyecto</h1>
       <div class="hint">Usa flechas izquierda/derecha o los botones inferiores</div>
     </div>
 
@@ -454,12 +454,12 @@
       <section class="slide active">
         <div class="stamp">Demo Ready</div>
         <span class="eyebrow">Slide 1 - Vision general</span>
-        <h2>Sistema de deteccion de pagos fraudulentos</h2>
+        <h2>Sistema de detección de pagos fraudulentos</h2>
         <p class="lead">Proyecto Lakehouse de extremo a extremo con Kafka, Spark, Iceberg, MinIO, Trino, Superset, Airflow y Neo4j para detectar fraude y explicar las alertas.</p>
         <div class="stat-strip">
           <div class="stat">
             <span class="value">7</span>
-            <span class="label">tecnologias principales conectadas</span>
+            <span class="label">tecnologías principales conectadas</span>
           </div>
           <div class="stat">
             <span class="value">3</span>
@@ -467,15 +467,15 @@
           </div>
           <div class="stat">
             <span class="value">1</span>
-            <span class="label">DAG manual para exportacion al grafo</span>
+            <span class="label">DAG manual para exportación al grafo</span>
           </div>
           <div class="stat">
             <span class="value">2</span>
-            <span class="label">modos de analisis: SQL y relaciones</span>
+            <span class="label">modos de análisis: SQL y relaciones</span>
           </div>
         </div>
         <div class="callout">
-          <strong>Mensaje para la exposicion:</strong>
+          <strong>Mensaje para la exposición:</strong>
           La clave no es solo detectar transacciones sospechosas, sino demostrar una arquitectura moderna que ingiere, limpia, enriquece, monitoriza y finalmente investiga relaciones complejas entre entidades.
         </div>
         <div class="footer">
@@ -486,12 +486,12 @@
 
       <section class="slide">
         <span class="eyebrow">Slide 2 - Arquitectura</span>
-        <h2>Arquitectura tecnica y flujo de datos</h2>
-        <p class="lead">El flujo separa claramente ingesta, persistencia cruda, enriquecimiento, deteccion, explotacion analitica y analisis de relaciones.</p>
+        <h2>Arquitectura técnica y flujo de datos</h2>
+        <p class="lead">El flujo separa claramente ingesta, persistencia cruda, enriquecimiento, detección, explotación analítica y análisis de relaciones.</p>
         <div class="flow">
           <div class="node accent-a">
             <span class="title">1. Generador</span>
-            <div class="mini">Python publica eventos sinteticos de pago hacia Kafka con casos normales, reintentos y patrones sospechosos.</div>
+            <div class="mini">Python publica eventos sintéticos de pago hacia Kafka con casos normales, reintentos y patrones sospechosos.</div>
           </div>
           <div class="node accent-a">
             <span class="title">2. Kafka</span>
@@ -515,16 +515,16 @@
           </div>
           <div class="node accent-c">
             <span class="title">7. Airflow + Neo4j</span>
-            <div class="mini">Compacta, exporta y carga el grafo para investigacion conectada.</div>
+            <div class="mini">Compacta, exporta y carga el grafo para investigación conectada.</div>
           </div>
         </div>
         <div class="callout">
-          <strong>Que destacar:</strong>
-          Bronze conserva el dato original, Silver lo hace util, Gold lo convierte en accionable y Neo4j permite pasar de una alerta aislada a una red sospechosa.
+          <strong>Qué destacar:</strong>
+          Bronze conserva el dato original, Silver lo hace útil, Gold lo convierte en accionable y Neo4j permite pasar de una alerta aislada a una red sospechosa.
         </div>
         <div class="footer">
           <span>Explica primero el flujo general y luego profundiza por etapas</span>
-          <span>2 / 10</span>
+          <span>2 / 11</span>
         </div>
       </section>
 
@@ -536,13 +536,13 @@
             <strong>Requisitos del entorno</strong>
             <ul>
               <li>Docker y Docker Compose instalados</li>
-              <li>Conexion a Internet en la primera ejecucion para descargar paquetes de Spark</li>
+              <li>Conexión a Internet en la primera ejecución para descargar paquetes de Spark</li>
               <li>Puertos libres: `5432`, `7474`, `7687`, `8080`, `8081`, `8088`, `9000`, `9001`, `29092`</li>
-              <li>Espacio suficiente para imagenes y volumenes locales</li>
+              <li>Espacio suficiente para imágenes y volúmenes locales</li>
             </ul>
           </div>
           <div class="card">
-            <strong>Comprobacion minima</strong>
+            <strong>Comprobación mínima</strong>
             <div class="terminal">docker --version
 docker compose version
 cp .env.example .env</div>
@@ -551,17 +551,17 @@ cp .env.example .env</div>
         </div>
         <div class="checklist">
           <div class="check">
-            <span>Que hay que vigilar</span>
+            <span>Qué hay que vigilar</span>
             Si `docker compose up` falla durante el build, lo primero es revisar conectividad de red y espacio en disco.
           </div>
           <div class="check">
-            <span>Que conviene explicar</span>
-            El proyecto se ha planteado para ser reproducible, con contenedores aislados y una red comun para todos los servicios.
+            <span>Qué conviene explicar</span>
+            El proyecto se ha planteado para ser reproducible, con contenedores aislados y una red común para todos los servicios.
           </div>
         </div>
         <div class="callout">
-          <strong>Aclaracion importante:</strong>
-          Aunque aparezca `AWS_REGION` en la configuracion, no se usa AWS real. MinIO habla API S3 y el cliente necesita una region ficticia para funcionar, por eso se fija `us-east-1`.
+          <strong>Aclaración importante:</strong>
+          Aunque aparezca `AWS_REGION` en la configuración, no se usa AWS real. MinIO habla API S3 y el cliente necesita una región ficticia para funcionar, por eso se fija `us-east-1`.
         </div>
         <div class="image-row">
           <div class="image-card">
@@ -570,18 +570,18 @@ cp .env.example .env</div>
           </div>
           <div class="image-card">
             <img src="https://spark.apache.org/docs/3.5.6/img/webui-structured-streaming-detail.png" alt="Spark Structured Streaming UI oficial">
-            <div class="caption">La Spark UI muestra la pestana `Structured Streaming`. Ahí es donde conviene leer `Input Rate`, `Process Rate`, `Input Rows` y `Batch Duration`.</div>
+            <div class="caption">La Spark UI muestra la pestaña `Structured Streaming`. Ahí es donde conviene leer `Input Rate`, `Process Rate`, `Input Rows` y `Batch Duration`.</div>
           </div>
         </div>
         <div class="footer">
           <span>Empieza la demo validando el entorno</span>
-          <span>3 / 10</span>
+          <span>3 / 11</span>
         </div>
       </section>
 
       <section class="slide">
         <span class="eyebrow">Slide 4 - Arranque</span>
-        <h2>Como levantar toda la plataforma</h2>
+        <h2>Cómo levantar toda la plataforma</h2>
         <div class="grid-2">
           <div>
             <div class="terminal">./scripts/start_all.sh</div>
@@ -589,7 +589,7 @@ cp .env.example .env</div>
               <strong>Este script hace todo esto</strong>
               <ol>
                 <li>Crea directorios `runtime`.</li>
-                <li>Construye las imagenes extendidas necesarias.</li>
+                <li>Construye las imágenes extendidas necesarias.</li>
                 <li>Levanta PostgreSQL, MinIO, Kafka, Spark, Neo4j y el contenedor del generador.</li>
                 <li>Inicializa el bucket de MinIO y el topic de Kafka.</li>
                 <li>Inicializa Airflow y Superset.</li>
@@ -598,31 +598,31 @@ cp .env.example .env</div>
             </div>
           </div>
           <div class="card">
-            <strong>Que debes verificar al terminar</strong>
+            <strong>Qué debes verificar al terminar</strong>
             <ul>
               <li>MinIO responde en `http://localhost:9001`</li>
               <li>Kafka UI responde en `http://localhost:8082`</li>
-              <li>Spark UI quedara visible en `http://localhost:4040-4050` al lanzar jobs Spark</li>
+              <li>Spark UI quedará visible en `http://localhost:4040-4050` al lanzar jobs Spark</li>
               <li>Superset responde en `http://localhost:8088`</li>
               <li>Airflow responde en `http://localhost:8081`</li>
               <li>Neo4j responde en `http://localhost:7474`</li>
               <li>Trino queda operativo en `http://localhost:8080`</li>
             </ul>
             <div class="callout">
-              <strong>Punto de atencion:</strong>
-              Si un servicio no responde, no sigas con la demo. Corrige primero la infraestructura, porque todo lo demas depende de esta base.
+              <strong>Punto de atención:</strong>
+              Si un servicio no responde, no sigas con la demo. Corrige primero la infraestructura, porque todo lo demás depende de esta base.
             </div>
           </div>
         </div>
         <div class="footer">
           <span>Un mal arranque arrastra errores al resto del pipeline</span>
-          <span>4 / 10</span>
+          <span>4 / 11</span>
         </div>
       </section>
 
       <section class="slide">
         <span class="eyebrow">Slide 5 - Ingesta</span>
-        <h2>Generacion de datos y capa Bronze</h2>
+        <h2>Generación de datos y capa Bronze</h2>
         <div class="grid-2">
           <div class="card">
             <strong>Paso 1: dejar Bronze escuchando</strong>
@@ -632,16 +632,16 @@ cp .env.example .env</div>
           <div class="card">
             <strong>Paso 2: lanzar el generador</strong>
             <div class="terminal">./scripts/run_generator.sh --events 5000 --sleep-ms 150</div>
-            <p>El generador simula pagos normales, reintentos, patrones sospechosos y algunos duplicados para poder demostrar la deduplicacion en Silver.</p>
+            <p>El generador simula pagos normales, reintentos, patrones sospechosos y algunos duplicados para poder demostrar la deduplicación en Silver.</p>
           </div>
         </div>
         <div class="table-like">
           <div class="head">Paso</div>
-          <div class="head">Que mirar</div>
-          <div class="head">Que decir</div>
+          <div class="head">Qué mirar</div>
+          <div class="head">Qué decir</div>
           <div>Bronze activo</div>
           <div>El job queda vivo y no termina. En Spark UI puedes ver el streaming y sus micro-batches.</div>
-          <div>La ingesta esta desacoplada y el sistema queda preparado para trabajar en flujo continuo.</div>
+          <div>La ingesta está desacoplada y el sistema queda preparado para trabajar en flujo continuo.</div>
           <div>Generador en marcha</div>
           <div>En Kafka UI se ven mensajes JSON entrando con diferentes escenarios y patrones de riesgo.</div>
           <div>No son datos aleatorios sin criterio; se han introducido conductas que luego activan reglas de fraude.</div>
@@ -658,20 +658,20 @@ cp .env.example .env</div>
         </div>
         <div class="footer">
           <span>Bronze demuestra la captura cruda del evento</span>
-          <span>5 / 10</span>
+          <span>5 / 11</span>
         </div>
       </section>
 
       <section class="slide">
-        <span class="eyebrow">Slide 6 - Transformacion</span>
-        <h2>Construccion de Silver y Gold</h2>
+        <span class="eyebrow">Slide 6 - Transformación</span>
+        <h2>Construcción de Silver y Gold</h2>
         <div class="grid-3">
           <div class="card">
             <strong>Silver</strong>
             <div class="terminal">./scripts/run_silver.sh</div>
             <ul>
               <li>tipado correcto</li>
-              <li>deduplicacion</li>
+              <li>deduplicación</li>
               <li>variables por ventanas temporales</li>
             </ul>
           </div>
@@ -685,28 +685,28 @@ cp .env.example .env</div>
             </ul>
           </div>
           <div class="card">
-            <strong>Que hay que fijarse</strong>
+            <strong>Qué hay que fijarse</strong>
             <ul>
-              <li>Silver suele tener menos filas que Bronze por la deduplicacion.</li>
+              <li>Silver suele tener menos filas que Bronze por la deduplicación.</li>
               <li>Gold contiene solo los casos sospechosos.</li>
-              <li>`reasons` explica por que se dispara cada alerta.</li>
+              <li>`reasons` explica por qué se dispara cada alerta.</li>
               <li>Si Bronze sigue vivo, Silver y Gold suelen abrir nuevas Spark UI en puertos siguientes, por ejemplo `4041` y `4042`.</li>
             </ul>
           </div>
         </div>
         <div class="callout">
           <strong>Mensaje para defender:</strong>
-          Silver crea contexto. Gold convierte ese contexto en decision. Esa separacion hace la arquitectura mas mantenible y mas explicable.
+          Silver crea contexto. Gold convierte ese contexto en decisión. Esa separación hace la arquitectura más mantenible y más explicable.
         </div>
         <div class="footer">
           <span>Esta es la parte donde se convierte el dato en inteligencia</span>
-          <span>6 / 10</span>
+          <span>6 / 11</span>
         </div>
       </section>
 
       <section class="slide">
-        <span class="eyebrow">Slide 7 - Validacion SQL</span>
-        <h2>Comprobacion de resultados con Trino</h2>
+        <span class="eyebrow">Slide 7 - Validación SQL</span>
+        <h2>Comprobación de resultados con Trino</h2>
         <div class="grid-2">
           <div class="card">
             <strong>Acceso al cliente SQL</strong>
@@ -724,36 +724,36 @@ ORDER BY risk_score DESC
 LIMIT 20;</div>
           </div>
           <div class="card">
-            <strong>Que debes comprobar y explicar</strong>
+            <strong>Qué debes comprobar y explicar</strong>
             <ul>
               <li>Bronze refleja la ingesta original.</li>
               <li>Silver filtra ruido y aporta contexto temporal.</li>
-              <li>Gold es la capa de accion y monitorizacion.</li>
+              <li>Gold es la capa de acción y monitorización.</li>
               <li>Las columnas `risk_score` y `reasons` hacen la alerta interpretable.</li>
             </ul>
-            <p class="note" style="margin-top: 12px;">En paralelo puedes mantener abiertas Kafka UI y Spark UI para ensenar tanto la entrada de mensajes como su procesamiento.</p>
+            <p class="note" style="margin-top: 12px;">En paralelo puedes mantener abiertas Kafka UI y Spark UI para enseñar tanto la entrada de mensajes como su procesamiento.</p>
             <div class="callout">
-              <strong>Frase util:</strong>
-              No solo detectamos fraude; podemos justificar por que una operacion ha sido marcada como sospechosa.
+              <strong>Frase útil:</strong>
+              No solo detectamos fraude; podemos justificar por qué una operación ha sido marcada como sospechosa.
             </div>
           </div>
         </div>
         <div class="footer">
           <span>Trino es la prueba de que el Lakehouse ya es explotable por SQL</span>
-          <span>7 / 10</span>
+          <span>7 / 11</span>
         </div>
       </section>
 
       <section class="slide">
-        <span class="eyebrow">Slide 8 - Visualizacion</span>
+        <span class="eyebrow">Slide 8 - Visualización</span>
         <h2>Dashboard en Superset y lectura operativa</h2>
         <div class="grid-2">
           <div class="card">
-            <strong>Configuracion base</strong>
+            <strong>Configuración base</strong>
             <p>Conectar Superset con la URI:</p>
             <div class="terminal">trino://trino@trino:8080/iceberg/payments</div>
             <p>Registrar los datasets `silver_payments` y `fraud_alerts`.</p>
-            <strong style="margin-top: 12px;">Graficas recomendadas</strong>
+            <strong style="margin-top: 12px;">Gráficas recomendadas</strong>
             <ul>
               <li>KPI total de transacciones</li>
               <li>KPI total de alertas</li>
@@ -763,33 +763,33 @@ LIMIT 20;</div>
             </ul>
           </div>
           <div class="card">
-            <strong>Que observar en cada visual</strong>
+            <strong>Qué observar en cada visual</strong>
             <ul>
               <li><strong>Volumen total:</strong> confirma que el pipeline procesa datos.</li>
-              <li><strong>Total de alertas:</strong> mide presion de fraude sobre el lote.</li>
-              <li><strong>Serie temporal:</strong> identifica picos o ventanas anomalias.</li>
-              <li><strong>Top merchants:</strong> ayuda a priorizar investigacion.</li>
-              <li><strong>Top cards:</strong> detecta concentracion de riesgo por medio de pago.</li>
+              <li><strong>Total de alertas:</strong> mide presión de fraude sobre el lote.</li>
+              <li><strong>Serie temporal:</strong> identifica picos o ventanas anomalías.</li>
+              <li><strong>Top merchants:</strong> ayuda a priorizar investigación.</li>
+              <li><strong>Top cards:</strong> detecta concentración de riesgo por medio de pago.</li>
             </ul>
             <div class="callout">
               <strong>Lectura de negocio:</strong>
-              El dashboard traduce la logica tecnica del pipeline en indicadores que un equipo de riesgo puede seguir.
+              El dashboard traduce la lógica técnica del pipeline en indicadores que un equipo de riesgo puede seguir.
             </div>
           </div>
         </div>
         <div class="footer">
           <span>Superset es la capa de observabilidad operativa</span>
-          <span>8 / 10</span>
+          <span>8 / 11</span>
         </div>
       </section>
 
       <section class="slide">
-        <span class="eyebrow">Slide 9 - Orquestacion y grafo</span>
-        <h2>Airflow y Neo4j para investigacion conectada</h2>
+        <span class="eyebrow">Slide 9 - Orquestación y grafo</span>
+        <h2>Airflow y Neo4j para investigación conectada</h2>
         <div class="grid-2">
           <div class="card">
             <strong>Disparo del DAG</strong>
-            <p>En Airflow, lanzar `fraud_graph_pipeline` con parametros como estos:</p>
+            <p>En Airflow, lanzar `fraud_graph_pipeline` con parámetros como estos:</p>
             <div class="terminal">{
   "source_table": "graph_payments",
   "start_ts": "",
@@ -799,22 +799,22 @@ LIMIT 20;</div>
             <p>El DAG compacta Iceberg, exporta CSVs y los carga en Neo4j.</p>
           </div>
           <div class="card">
-            <strong>Consultas Cypher a ensenar</strong>
+            <strong>Consultas Cypher a enseñar</strong>
             <ul>
-              <li>dispositivos compartidos por multiples tarjetas</li>
-              <li>tarjetas utilizadas en multiples paises</li>
-              <li>comercios conectados a multiples entidades sospechosas</li>
-              <li>agrupaciones de comportamiento anomalo</li>
+              <li>dispositivos compartidos por múltiples tarjetas</li>
+              <li>tarjetas utilizadas en múltiples países</li>
+              <li>comercios conectados a múltiples entidades sospechosas</li>
+              <li>agrupaciones de comportamiento anómalo</li>
             </ul>
             <div class="callout">
-              <strong>Que aporta Neo4j:</strong>
+              <strong>Qué aporta Neo4j:</strong>
               SQL detecta registros sospechosos. El grafo permite descubrir si varios casos aparentemente aislados forman parte de una misma red.
             </div>
           </div>
         </div>
         <div class="footer">
-          <span>Aqui es donde el proyecto gana profundidad investigadora</span>
-          <span>9 / 10</span>
+          <span>Aquí es donde el proyecto gana profundidad investigadora</span>
+          <span>9 / 11</span>
         </div>
       </section>
 
@@ -831,34 +831,85 @@ LIMIT 20;</div>
             Mostrar Bronze escuchando y el generador publicando eventos.
           </div>
           <div class="check">
-            <span>3. Transformacion</span>
-            Ejecutar Silver y Gold y explicar por que se separan ambas capas.
+            <span>3. Transformación</span>
+            Ejecutar Silver y Gold y explicar por qué se separan ambas capas.
           </div>
           <div class="check">
-            <span>4. Verificacion</span>
-            Ensenar consultas en Trino con recuentos y alertas de mayor riesgo.
+            <span>4. Verificación</span>
+            Enseñar consultas en Trino con recuentos y alertas de mayor riesgo.
           </div>
           <div class="check">
-            <span>5. Visualizacion</span>
-            Mostrar el dashboard de Superset y leer las metricas clave.
+            <span>5. Visualización</span>
+            Mostrar el dashboard de Superset y leer las métricas clave.
           </div>
           <div class="check">
-            <span>6. Investigacion</span>
+            <span>6. Investigación</span>
             Lanzar el DAG y terminar con una consulta en Neo4j.
           </div>
         </div>
         <div class="card" style="margin-top: 20px;">
           <strong>Mensajes finales recomendados</strong>
           <ul>
-            <li>La arquitectura separa bien ingestion, procesamiento, consumo y analisis forense.</li>
+            <li>La arquitectura separa bien ingesta, procesamiento, consumo y análisis forense.</li>
             <li>Las alertas son explicables porque cada una conserva su `risk_score` y `reasons`.</li>
-            <li>El sistema es ampliable: se pueden anadir modelos, nuevas reglas y nuevas fuentes.</li>
-            <li>El valor diferencial aparece al combinar SQL para monitorizacion y grafo para investigacion conectada.</li>
+            <li>El sistema es ampliable: se pueden añadir modelos, nuevas reglas y nuevas fuentes.</li>
+            <li>El valor diferencial aparece al combinar SQL para monitorización y grafo para investigación conectada.</li>
           </ul>
         </div>
         <div class="footer">
-          <span>Cierra la exposicion uniendo arquitectura, operativa y valor analitico</span>
-          <span>10 / 10</span>
+          <span>Cierra la exposición uniendo arquitectura, operativa y valor analítico</span>
+          <span>10 / 11</span>
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="eyebrow">Slide 11 - Anexo de incidencias</span>
+        <h2>Errores reales encontrados y cómo se resolvieron</h2>
+        <p class="lead">El proyecto no solo se ha construido; también se ha endurecido durante la puesta en marcha. Este anexo resume los fallos reales más importantes y la corrección aplicada.</p>
+        <div class="table-like">
+          <div class="head">Incidencia</div>
+          <div class="head">Impacto observado</div>
+          <div class="head">Solución aplicada</div>
+
+          <div>Imagen pública de Spark no disponible</div>
+          <div>El arranque fallaba al depender de una tag externa inestable.</div>
+          <div>Se sustituyó por una imagen local propia en `docker/spark/Dockerfile`.</div>
+
+          <div>Airflow y Superset init mal encadenados</div>
+          <div>Los contenedores de inicialización no ejecutaban correctamente sus comandos.</div>
+          <div>Se reescribieron los `entrypoint` en `docker-compose.yml` para que la inicialización fuera determinista.</div>
+
+          <div>Iceberg contra MinIO sin región S3</div>
+          <div>Bronze fallaba con `Unable to load region` al crear tablas.</div>
+          <div>Se fijó `AWS_REGION=us-east-1` en Spark, scripts y Compose. No implica usar AWS real.</div>
+
+          <div>Bronze parecía arrancar, pero volvía al prompt</div>
+          <div>El job streaming quedaba ambiguo y costaba diagnosticar si seguía vivo.</div>
+          <div>Se mejoraron trazas, `trigger`, nombre de query y `docker compose exec -T`.</div>
+
+          <div>Trino no arrancaba o se caía</div>
+          <div>Errores de catálogo JDBC y reinicios por memoria con `Exited (137)`.</div>
+          <div>Se añadió `driver-class`, se ajustaron JVM y memoria, y se estabilizó el servicio.</div>
+
+          <div>Gold fallaba en PySpark</div>
+          <div>`array_remove` sobre columnas rompía el job y después hubo problemas de JVM.</div>
+          <div>Se rehizo la construcción de razones y se simplificó la escritura de Iceberg.</div>
+
+          <div>Neo4j y Airflow muy sensibles con 8 GB de RAM</div>
+          <div>Servicios caídos, DAGs rotos o Browser inestable durante la demo.</div>
+          <div>Se bajaron recursos, se documentaron apagados selectivos y se operó por fases.</div>
+
+          <div>Compactación de Iceberg bloqueando el DAG</div>
+          <div>El paso `compact_iceberg_table` podía cortar el pipeline de grafo.</div>
+          <div>La compactación se dejó como best-effort para no impedir la exportación y la carga en Neo4j.</div>
+        </div>
+        <div class="callout">
+          <strong>Mensaje para defensa:</strong>
+          El valor del proyecto no está solo en el resultado final, sino en haber identificado problemas reales de integración entre Spark, Iceberg, Trino, Airflow, MinIO y Neo4j, y haber dejado el sistema operativo y documentado.
+        </div>
+        <div class="footer">
+          <span>Anexo basado en incidencias reales resueltas durante la construcción</span>
+          <span>11 / 11</span>
         </div>
       </section>
     </div>

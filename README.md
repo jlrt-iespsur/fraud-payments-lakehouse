@@ -1,12 +1,12 @@
 # Fraud Payments Lakehouse
 
-Plataforma de deteccion de fraude en pagos con arquitectura Lakehouse, procesamiento casi en tiempo real y vista relacional y de grafo sobre el mismo dominio.
+Plataforma de detección de fraude en pagos con arquitectura Lakehouse, procesamiento casi en tiempo real y vista relacional y de grafo sobre el mismo dominio.
 
 ## Resumen
 
 El proyecto implementa un flujo completo para:
 
-- generar eventos sinteticos de pago en Kafka
+- generar eventos sintéticos de pago en Kafka
 - persistir una capa Bronze en Iceberg sobre MinIO con Spark Streaming
 - enriquecer el dato en Silver con variables temporales y de comportamiento
 - calcular alertas interpretables en Gold con `risk_score` y motivos
@@ -22,12 +22,12 @@ Generator -> Kafka -> Spark Bronze -> Iceberg/MinIO
                                  -> Spark Gold   -> Iceberg/MinIO
 
 Trino ------> consultas SQL sobre Iceberg
-Superset ---> analitica y dashboards
-Airflow ----> compactacion/exportacion de dataset de grafo
-Neo4j ------> investigacion relacional y de patrones sospechosos
+Superset ---> analítica y dashboards
+Airflow ----> compactación/exportación de dataset de grafo
+Neo4j ------> investigación relacional y de patrones sospechosos
 ```
 
-## Stack tecnologico
+## Stack tecnológico
 
 - Apache Kafka
 - Apache Spark 3.5
@@ -44,17 +44,17 @@ Neo4j ------> investigacion relacional y de patrones sospechosos
 
 ```text
 .
-├── airflow/                 # DAGs de orquestacion
+├── airflow/                 # DAGs de orquestación
 ├── apps/
-│   ├── generator/           # Generador sintetico de eventos
+│   ├── generator/           # Generador sintético de eventos
 │   └── spark/               # Jobs Bronze, Silver y Gold
-├── config/                  # Configuracion de Trino y otros servicios
+├── config/                  # Configuración de Trino y otros servicios
 ├── docker/                  # Dockerfiles personalizados
-├── docs/                    # Manuales, memoria, presentacion y anexos
+├── docs/                    # Manuales, memoria, presentación y anexos
 ├── neo4j/cypher/            # Carga y consultas Cypher
 ├── orchestration/           # Tareas reutilizables de Airflow
-├── scripts/                 # Scripts de operacion
-├── sql/                     # Consultas de validacion
+├── scripts/                 # Scripts de operación
+├── sql/                     # Consultas de validación
 └── superset/                # Consultas auxiliares de dashboard
 ```
 
@@ -62,7 +62,7 @@ Neo4j ------> investigacion relacional y de patrones sospechosos
 
 - Docker Desktop
 - Docker Compose
-- macOS, Linux o Windows con virtualizacion activa
+- macOS, Linux o Windows con virtualización activa
 - Recomendado: al menos 8 GB de RAM asignables a Docker
 
 Si trabajas con 8 GB totales de RAM, es recomendable operar por fases y parar servicios no necesarios durante la demo.
@@ -100,6 +100,159 @@ make generator
 make silver
 make gold
 ```
+
+## Scripts de operación
+
+Estos son los scripts principales del proyecto y el momento en que conviene usarlos:
+
+### `./scripts/start_all.sh`
+
+Levanta toda la infraestructura base del proyecto.
+
+Qué hace:
+
+- crea directorios de `runtime` si no existen
+- construye las imágenes locales necesarias
+- arranca los servicios principales
+- ejecuta los contenedores de inicialización
+- deja listas las interfaces web y la base para el pipeline
+
+Cuándo usarlo:
+
+- al empezar desde cero
+- después de clonar el repositorio
+- cuando quieres volver a dejar toda la plataforma lista para trabajar
+
+### `./scripts/restart_all.sh`
+
+Reinicia la plataforma completa sin borrar datos persistidos.
+
+Qué hace:
+
+- ejecuta `docker compose down`
+- vuelve a llamar a `./scripts/start_all.sh`
+
+Cuándo usarlo:
+
+- si varios servicios han quedado inestables
+- si quieres reiniciar el stack entero sin hacer una limpieza completa
+
+### `./scripts/clean_all.sh`
+
+Borra el entorno local y deja el proyecto preparado para un arranque limpio.
+
+Qué hace:
+
+- baja contenedores y elimina volúmenes del proyecto
+- borra datos de `runtime`
+- recrea la estructura mínima de carpetas
+
+Cuándo usarlo:
+
+- si quieres empezar completamente desde cero
+- si el estado local ha quedado corrupto o inconsistente
+- antes de una prueba limpia de entrega o validación final
+
+### `./scripts/run_bronze.sh`
+
+Lanza el job de Spark Streaming que consume Kafka y escribe Bronze en Iceberg.
+
+Qué hace:
+
+- ejecuta `bronze_to_iceberg.py` dentro del contenedor `spark`
+- añade los paquetes Spark, Iceberg y PostgreSQL necesarios
+- fija la región S3 compatible para MinIO
+
+Cuándo usarlo:
+
+- después de `start_all.sh`
+- antes de generar eventos
+- mientras quieras que Bronze siga consumiendo Kafka
+
+Importante:
+
+- se queda en ejecución
+- debe mantenerse abierto en su propia terminal durante la ingesta
+
+### `./scripts/run_generator.sh`
+
+Genera eventos sintéticos de pago y los publica en Kafka.
+
+Qué hace:
+
+- ejecuta `payment_event_generator.py` dentro del contenedor `generator`
+- admite parámetros como `--events` y `--sleep-ms`
+
+Cuándo usarlo:
+
+- cuando Bronze ya está escuchando
+- para poblar el pipeline con datos de demo
+- para repetir pruebas con distintos volúmenes o ritmos
+
+### `./scripts/run_silver.sh`
+
+Construye la capa Silver a partir de Bronze.
+
+Qué hace:
+
+- ejecuta `silver_enrichment.py` en Spark
+- tipa campos
+- elimina duplicados
+- calcula variables de comportamiento y ventana temporal
+
+Cuándo usarlo:
+
+- después de haber generado suficientes eventos
+- cuando Bronze ya ha escrito datos en Iceberg
+- cada vez que quieras recalcular Silver con el estado actual de Bronze
+
+Importante:
+
+- es un job batch
+- termina y devuelve el prompt
+
+### `./scripts/run_gold.sh`
+
+Construye la capa Gold a partir de Silver.
+
+Qué hace:
+
+- ejecuta `gold_fraud_detection.py` en Spark
+- aplica reglas de fraude
+- genera `fraud_alerts`
+- genera `graph_payments`
+
+Cuándo usarlo:
+
+- después de ejecutar Silver
+- cuando quieras recalcular alertas y preparar el dataset de grafo
+
+Importante:
+
+- también es un job batch
+- termina y devuelve el prompt
+
+## Orden recomendado de uso
+
+Para una ejecución normal o una demo, el orden correcto es este:
+
+1. `cp .env.example .env`
+2. `./scripts/start_all.sh`
+3. `./scripts/run_bronze.sh`
+4. `./scripts/run_generator.sh --events 5000 --sleep-ms 150`
+5. `./scripts/run_silver.sh`
+6. `./scripts/run_gold.sh`
+
+Para reiniciar sin borrar datos:
+
+1. `./scripts/restart_all.sh`
+2. volver a lanzar los jobs que necesites
+
+Para empezar desde cero:
+
+1. `./scripts/clean_all.sh`
+2. `./scripts/start_all.sh`
+3. repetir el flujo normal
 
 ## Interfaces disponibles
 
@@ -149,7 +302,7 @@ ORDER BY risk_score DESC
 LIMIT 20;
 ```
 
-### 4. Grafo de investigacion
+### 4. Grafo de investigación
 
 - Lanzar el DAG `fraud_graph_pipeline` en Airflow
 - Validar nodos y relaciones en Neo4j Browser
@@ -160,7 +313,7 @@ LIMIT 20;
 - Silver: `7299` registros
 - Gold (`fraud_alerts`): `7049` alertas
 
-## Operacion y mantenimiento
+## Operación y mantenimiento
 
 Parar servicios pesados cuando no se necesiten:
 
@@ -180,18 +333,18 @@ Limpiar runtime local:
 ./scripts/clean_all.sh
 ```
 
-## Documentacion
+## Documentación
 
 - [Manual de uso](docs/MANUAL_DE_USO.md)
-- [Documentacion tecnica completa](docs/DOCUMENTACION_FINAL.md)
+- [Documentación técnica completa](docs/DOCUMENTACION_FINAL.md)
 - [Informe de resultados y conclusiones](docs/INFORME_RESULTADOS_Y_CONCLUSIONES.md)
 - [Anexo de soluciones a errores](docs/ANEXO_SOLUCIONES_A_POSIBLES_ERRORES.md)
-- [Presentacion del proyecto](docs/PRESENTACION_PROYECTO.html)
+- [Presentación del proyecto](docs/PRESENTACION_PROYECTO.html)
 - [Referencias](docs/REFERENCIAS.md)
 
 ## Seguridad
 
-Este repositorio esta orientado a demostracion y entorno local. No uses las credenciales de ejemplo en entornos reales.
+Este repositorio está orientado a demostración y entorno local. No uses las credenciales de ejemplo en entornos reales.
 
 ## Licencia
 

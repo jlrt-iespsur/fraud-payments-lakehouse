@@ -55,8 +55,8 @@ def compact_table(table_name: str) -> None:
         cursor.execute(statement)
         cursor.fetchall()
     except Exception as exc:
-        # In low-memory local environments Trino can drop the connection during optimize.
-        # Compaction is useful but not required for exporting and loading the graph.
+        # Si Trino va justo de memoria, este optimize puede cortar la conexión.
+        # Para la demo no pasa nada: el grafo puede exportarse igual.
         LOGGER.warning("Se omite la compactacion de %s.%s.%s: %s", catalog, schema, safe_table, exc)
     finally:
         conn.close()

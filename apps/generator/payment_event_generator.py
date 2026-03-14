@@ -158,7 +158,7 @@ def main() -> None:
         if event["status"] == "declined":
             recent_declines.append(event)
 
-        # Simula duplicados esporadicos para probar la deduplicacion de Silver.
+        # Metemos algún duplicado suelto para comprobar que Silver los limpia.
         if recent_events and random.random() < 0.02:
             duplicate = dict(random.choice(list(recent_events)))
             producer.send(args.topic, value=duplicate, key=str(duplicate["card_id"]).encode("utf-8"))

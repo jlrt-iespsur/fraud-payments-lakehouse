@@ -1,6 +1,6 @@
 # Referencias oficiales y proyectos similares
 
-## Documentacion oficial
+## Documentación oficial
 
 - Spark Structured Streaming + Kafka Integration Guide: <https://spark.apache.org/docs/3.5.6/structured-streaming-kafka-integration.html>
 - Spark Structured Streaming Programming Guide: <https://spark.apache.org/docs/3.5.0/structured-streaming-programming-guide.html>

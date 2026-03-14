@@ -28,11 +28,11 @@ def load_graph_task(**context) -> None:
 
 with DAG(
     dag_id="fraud_graph_pipeline",
-    description="Compactacion Iceberg y carga bajo demanda del grafo de fraude",
+    description="Compactación de Iceberg y carga bajo demanda del grafo de fraude",
     start_date=datetime(2026, 3, 1),
     schedule=None,
     catchup=False,
-    default_args={"owner": "codex", "retries": 1, "retry_delay": timedelta(minutes=2)},
+    default_args={"owner": "airflow", "retries": 1, "retry_delay": timedelta(minutes=2)},
     params={
         "source_table": Param("graph_payments", type="string"),
         "start_ts": Param("", type=["null", "string"]),

@@ -1,4 +1,4 @@
-// Sustituye <graph_name> por el nombre del snapshot exportado en runtime/neo4j/import.
+// Cambia <graph_name> por el nombre del snapshot exportado en runtime/neo4j/import.
 
 LOAD CSV WITH HEADERS FROM 'file:///<graph_name>/customers.csv' AS row
 MERGE (:Customer {customer_id: row.customer_id});
