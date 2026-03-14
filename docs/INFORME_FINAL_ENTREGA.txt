@@ -181,9 +181,9 @@ Durante la validación se observaron visualmente varias evidencias relevantes:
   - subgrafos con dispositivos compartidos por múltiples tarjetas
 
 Nota:
-Las capturas utilizadas en la conversación estaban disponibles en el hilo, pero
-no como archivos locales dentro del workspace. Por ese motivo este informe recoge
-su descripción y el resultado validado, pero no las incrusta como imágenes.
+Este informe recoge el contenido validado y un resumen de las evidencias
+observadas durante la ejecución, pero no incluye capturas incrustadas como
+imágenes.
 
 
 8. LIMITACIONES RECONOCIDAS
