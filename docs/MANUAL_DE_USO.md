@@ -602,7 +602,7 @@ Consultas que conviene lanzar en una demo:
 3. comercios conectados a múltiples alertas
 4. agrupaciones de comportamiento anómalo alrededor de dispositivos compartidos
 
-Qué debes interpretar:
+Qué debes observar o tener en cuenta:
 
 - un dispositivo compartido por muchas tarjetas puede indicar muleo, pruebas de tarjetas o uso fraudulento coordinado
 - una tarjeta usada en varios países en poco tiempo es un indicador clásico de compromiso
@@ -623,9 +623,7 @@ La mejor secuencia para exponer sin perder tiempo es:
 9. abrir Neo4j y ejecutar una consulta de relaciones
 10. cerrar con conclusiones apoyándote en [INFORME_RESULTADOS_Y_CONCLUSIONES.md](../docs/INFORME_RESULTADOS_Y_CONCLUSIONES.md)
 
-## 12. Guion corto para defender el proyecto
-
-Puedes explicarlo asi:
+## 12. Flujo general del proyecto
 
 1. Kafka recibe eventos de pago casi en tiempo real.
 2. Spark Streaming persiste la capa Bronze sin alterar el dato original.
@@ -692,16 +690,3 @@ Limpiar datos y volver a cero:
 ./scripts/clean_all.sh
 ```
 
-## 14. Cierre del manual
-
-Si sigues este orden, puedes enseñar el proyecto completo de extremo a extremo:
-
-- ingesta
-- persistencia
-- enriquecimiento
-- detección
-- visualización
-- orquestación
-- investigación relacional
-
-Ese recorrido es suficiente para defender tanto la parte técnica como la parte funcional del sistema.

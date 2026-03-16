@@ -40,3 +40,5 @@ replay_pid*.log
 dist/
 build/
 docs/INFORME_FINAL_ENTREGA.pdf
+
+.editorconfig

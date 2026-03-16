@@ -18,8 +18,8 @@ El proyecto implementa un flujo completo para:
 
 ```text
 Generator -> Kafka -> Spark Bronze -> Iceberg/MinIO
-                                 -> Spark Silver -> Iceberg/MinIO
-                                 -> Spark Gold   -> Iceberg/MinIO
+                                   -> Spark Silver -> Iceberg/MinIO
+                                   -> Spark Gold   -> Iceberg/MinIO
 
 Trino ------> consultas SQL sobre Iceberg
 Superset ---> analítica y dashboards
@@ -65,7 +65,8 @@ Neo4j ------> investigación relacional y de patrones sospechosos
 - macOS, Linux o Windows con virtualización activa
 - Recomendado: al menos 8 GB de RAM asignables a Docker
 
-Si trabajas con 8 GB totales de RAM, es recomendable operar por fases y parar servicios no necesarios durante la demo.
+Se han observado problemas de rendimiento en entornos con 8 GB de RAM,
+es recomendable operar por fases y parar servicios no necesarios durante la ejecución.
 
 ## Puesta en marcha
 
@@ -108,9 +109,6 @@ Estos son los scripts principales del proyecto y el momento en que conviene usar
 ### `./scripts/start_all.sh`
 
 Levanta toda la infraestructura base del proyecto.
-
-Qué hace:
-
 - crea directorios de `runtime` si no existen
 - construye las imágenes locales necesarias
 - arranca los servicios principales
@@ -126,9 +124,6 @@ Cuándo usarlo:
 ### `./scripts/restart_all.sh`
 
 Reinicia la plataforma completa sin borrar datos persistidos.
-
-Qué hace:
-
 - ejecuta `docker compose down`
 - vuelve a llamar a `./scripts/start_all.sh`
 
@@ -140,9 +135,6 @@ Cuándo usarlo:
 ### `./scripts/clean_all.sh`
 
 Borra el entorno local y deja el proyecto preparado para un arranque limpio.
-
-Qué hace:
-
 - baja contenedores y elimina volúmenes del proyecto
 - borra datos de `runtime`
 - recrea la estructura mínima de carpetas
@@ -156,9 +148,6 @@ Cuándo usarlo:
 ### `./scripts/run_bronze.sh`
 
 Lanza el job de Spark Streaming que consume Kafka y escribe Bronze en Iceberg.
-
-Qué hace:
-
 - ejecuta `bronze_to_iceberg.py` dentro del contenedor `spark`
 - añade los paquetes Spark, Iceberg y PostgreSQL necesarios
 - fija la región S3 compatible para MinIO
@@ -177,9 +166,6 @@ Importante:
 ### `./scripts/run_generator.sh`
 
 Genera eventos sintéticos de pago y los publica en Kafka.
-
-Qué hace:
-
 - ejecuta `payment_event_generator.py` dentro del contenedor `generator`
 - admite parámetros como `--events` y `--sleep-ms`
 
@@ -192,9 +178,6 @@ Cuándo usarlo:
 ### `./scripts/run_silver.sh`
 
 Construye la capa Silver a partir de Bronze.
-
-Qué hace:
-
 - ejecuta `silver_enrichment.py` en Spark
 - tipa campos
 - elimina duplicados
@@ -214,9 +197,6 @@ Importante:
 ### `./scripts/run_gold.sh`
 
 Construye la capa Gold a partir de Silver.
-
-Qué hace:
-
 - ejecuta `gold_fraud_detection.py` en Spark
 - aplica reglas de fraude
 - genera `fraud_alerts`
